@@ -8,7 +8,7 @@
 -- Module      :  Main
 -- Copyright   :  (C) 2016-2025 David M. Johnson
 -- License     :  BSD3-style (see the file LICENSE)
--- Maintainer  :  David M. Johnson <code@dmj.io>
+-- Maintainer  :  Miksu Rankaviita
 -- Stability   :  experimental
 -- Portability :  non-portable
 ----------------------------------------------------------------------------
@@ -112,7 +112,7 @@ viewModel Model{..} =
     [ M.h1_
       [ M.class_ "title has-text-centered"
       ]
-      [ "🍜 Miso File Reader example"
+      [ "🍜 Miso File Upload example"
       ]
     , M.div_
       [ M.class_ "columns is-centered mt-5"
