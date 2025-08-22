@@ -2,15 +2,7 @@ cabal-version:          3.0
 name:                   miso-fileupload
 version:                0.1
 
-executable app
-  hs-source-dirs:
-    src
-  main-is:
-    Main.hs
-  build-depends:
-    base, miso, jsaddle
-  default-language:
-    GHC2024
+common wasm
   if arch(wasm32)
     ghc-options:
       -Wall
@@ -19,5 +11,46 @@ executable app
       -ddump-splices
     cpp-options:
       -DWASM
+
+executable client
+  import:
+    wasm
+  main-is:
+    Main.hs
+  build-depends:
+    base,
+    bytestring,
+    jsaddle,
+    miso,
+    servant,
+    text
+  hs-source-dirs:
+    client, shared
+  other-modules:
+    Common
+  default-language:
+    Haskell2010
   default-extensions:
     CPP TemplateHaskell
+
+executable server
+  import:
+    wasm
+  main-is:
+    Main.hs
+  build-depends:
+    base,
+    bytestring,
+    case-insensitive,
+    servant,
+    servant-server,
+    text,
+    wai,
+    wai-cors,
+    warp
+  hs-source-dirs:
+    server, shared
+  other-modules:
+    Common
+  default-language:
+    Haskell2010
