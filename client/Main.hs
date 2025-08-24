@@ -23,7 +23,7 @@ import           Prelude hiding ((!!), null, unlines)
 import           Miso hiding ((<#))
 import qualified Miso as M
 import           Miso.Lens ((.=), Lens, lens)
-import           Miso.String (MisoString, unlines, null)
+import           Miso.String (MisoString, unlines, null, ms)
 import qualified Miso.Style as CSS
 ----------------------------------------------------------------------------
 -- | Model
@@ -39,8 +39,11 @@ info = lens _info $ \r x -> r { _info = x }
 -- | Action
 data Action
   = ReadFile JSVal
+  | UploadFile MisoString JSVal
   | SetContent MisoString
   | ClickInput JSVal
+  | PrintSuccess
+  | PrintFail MisoString
 ----------------------------------------------------------------------------
 -- | WASM support
 #ifdef WASM
@@ -93,12 +96,27 @@ updateModel (ReadFile input) = M.withSink $ \sink -> do
       sink (SetContent result)
   case files_ of
     [] -> consoleLog "No file specified"
-    file : _ -> void $ reader # ("readAsText" :: MisoString) $ [file]
+    file : _ -> do
+      name <- J.valToStr =<< file ! ("name" :: MisoString)
+      sink $ UploadFile (ms name) file
+      void $ reader # ("readAsText" :: MisoString) $ [file]
+updateModel (UploadFile n f) =
+  fetch
+    "http://localhost:8000/upload"
+    "POST"
+    (Just f)
+    [ accept =: applicationJSON,
+      contentType =: "application/octet-stream",
+      "Content-Name" =: n ]
+    (const PrintSuccess :: Int -> Action)
+    PrintFail
 updateModel (SetContent c) =
   info .= c
 updateModel (ClickInput button) = io_ $ do
   input <- nextSibling button
   input & click ()
+updateModel PrintSuccess = io_ $ consoleLog "File uploaded successfully!"
+updateModel (PrintFail err) = io_ . consoleLog $ "File upload failed: " <> err
 ----------------------------------------------------------------------------
 -- | View function
 viewModel :: Model -> View Model Action

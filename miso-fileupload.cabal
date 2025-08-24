@@ -25,9 +25,7 @@ executable client
     servant,
     text
   hs-source-dirs:
-    client, shared
-  other-modules:
-    Common
+    client
   default-language:
     Haskell2010
   default-extensions:
@@ -49,8 +47,6 @@ executable server
     wai-cors,
     warp
   hs-source-dirs:
-    server, shared
-  other-modules:
-    Common
+    server
   default-language:
     Haskell2010
