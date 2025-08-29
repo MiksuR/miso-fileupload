@@ -7,6 +7,7 @@
 -- |
 -- Module      :  Main
 -- Copyright   :  (C) 2016-2025 David M. Johnson
+--                (C) 2025 Miksu Rankaviita
 -- License     :  BSD3-style (see the file LICENSE)
 -- Maintainer  :  Miksu Rankaviita
 -- Stability   :  experimental
