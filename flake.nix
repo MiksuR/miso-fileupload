@@ -15,7 +15,7 @@
         devShells.default = pkgs.mkShell {
           inputsFrom = [ config.haskellProjects.default.outputs.devShell ];
           shellHook = "exec zsh";
-          packages = [  ];
+          packages = with pkgs; [ ghcid ];
         };
 
         packages.default = config.packages.miso-fileupload;
