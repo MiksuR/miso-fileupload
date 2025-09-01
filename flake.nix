@@ -4,7 +4,7 @@
       systems = nixpkgs.lib.systems.flakeExposed;
       imports = [ inputs.haskell-flake.flakeModule ];
 
-      perSystem = { config, pkgs, ... }: {
+      perSystem = { system, config, pkgs, ... }: {
         haskellProjects.default = {
           packages = {
             miso.source = inputs.miso;
@@ -14,8 +14,11 @@
 
         devShells.default = pkgs.mkShell {
           inputsFrom = [ config.haskellProjects.default.outputs.devShell ];
-          shellHook = "exec zsh";
-          packages = with pkgs; [ ghcid ];
+          packages = [
+            pkgs.ghcid
+            pkgs.gnumake
+            inputs.ghc-wasm-meta.packages.${system}.all_9_12
+          ];
         };
 
         packages.default = config.packages.miso-fileupload;
@@ -27,5 +30,6 @@
     flake-parts.url = "github:hercules-ci/flake-parts";
     haskell-flake.url = "github:srid/haskell-flake";
     miso.url = "github:dmjio/miso";
+    ghc-wasm-meta.url = "gitlab:haskell-wasm/ghc-wasm-meta?host=gitlab.haskell.org";
   };
 }

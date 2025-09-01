@@ -48,5 +48,5 @@ app = mw $ serve api server
         }
 
 main :: IO ()
-main = run 8000 app
+main = putStrLn "Serving at http://localhost:8000/index.html" >> run 8000 app
 

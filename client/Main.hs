@@ -103,7 +103,7 @@ updateModel (ReadFile input) = M.withSink $ \sink -> do
       void $ reader # ("readAsText" :: MisoString) $ [file]
 updateModel (UploadFile n f) =
   fetch
-    "http://localhost:8000/upload"
+    "/upload"
     "POST"
     (Just f)
     [ accept =: applicationJSON,
