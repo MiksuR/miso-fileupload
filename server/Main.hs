@@ -14,6 +14,7 @@ import Network.Wai.Handler.Warp
 import Network.Wai.Middleware.Cors
 import Servant
 import Servant.API
+import System.Directory
 
 type UploadAPI = Header "Content-Name" T.Text :> ReqBody '[OctetStream] BL.ByteString :> Post '[JSON] Integer
 
@@ -27,13 +28,13 @@ uploadServer :: Server UploadAPI
 uploadServer fileName fileBytes = do
   case fileName of
     Nothing -> return ()
-    Just n -> liftIO $ BL.writeFile 
-                ("uploads/" ++ (T.unpack n))
-                fileBytes
+    Just n -> liftIO $ do
+      createDirectoryIfMissing False "./uploads"
+      BL.writeFile ("uploads/" ++ (T.unpack n)) fileBytes
   return 0
 
 staticServer :: Server Raw
-staticServer = serveDirectoryWebApp "static"
+staticServer = serveDirectoryWebApp "public"
 
 server :: Server API
 server = uploadServer :<|> staticServer
