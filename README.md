@@ -3,20 +3,20 @@
 This fork of [miso-filereader](https://github.com/haskell-miso/miso-filereader)
 connects to a Servant server that receives file uploads.
 
-## Develop
+For the development setup, see the [develop branch](https://github.com/MiksuR/miso-fileupload/tree/develop).
 
-Running the development environment requires [Nix Flakes](https://nixos.wiki/wiki/Flakes).
+# Building
+Building the project requires [Nix Flakes](https://nixos.wiki/wiki/Flakes).
 
-The client can be run with hot-reload by typing
+After installing Nix and enabling flakes, first enter a devshell by typing
 
 ```
 nix develop
-ghcid -c 'cabal repl client' -T=Main.main
 ```
 
-The server can be run with
+The project can be built and served using `make`:
 
-``` 
-nix develop
-cabal repl server
+```
+make
+make serve
 ```
